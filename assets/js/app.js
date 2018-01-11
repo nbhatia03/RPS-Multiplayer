@@ -76,6 +76,18 @@ function deletePlayerFromDOM(num){
     $('#p' + num + 'losses').text('')
 }
 
+function showButtons(){
+    console.log('PlayerNum: ' + playerNum)
+    if(playerNum === 1){
+        $('#p1choices').append('Player 1 choices')
+        console.log('it worked');
+    }
+
+    if(playerNum === 2){
+        $('#p2choices').append('Player 2 choices')
+    }
+}
+
 database.ref().on('value', function(snapshot){
     //if data exists
     if (snapshot.val()){
@@ -86,6 +98,7 @@ database.ref().on('value', function(snapshot){
             $('#p1name').text(playerOne);
             $('#p1wins').text(p1.wins);
             $('#p1losses').text(p1.losses);
+            setTimeout(showButtons, 1000); //this needs to be asynchronous, also fires too many times
         }else{
             deletePlayerFromDOM(1);
         }
@@ -96,6 +109,7 @@ database.ref().on('value', function(snapshot){
             $('#p2name').text(playerTwo);
             $('#p2wins').text(p2.wins);
             $('#p2losses').text(p2.losses); 
+            setTimeout(showButtons, 1000); ////this needs to be asynchronous
         }else{
             deletePlayerFromDOM(2);
         }
