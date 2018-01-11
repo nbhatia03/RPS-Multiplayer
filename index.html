@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css" >
     <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 
 
 </head>
 <body>
     <div class="content">
-        <form action="">
+        <form action="" id='enter-name'>
             <label for="">Enter Your Name</label>
             <input type="text" id='name-input' placeholder="Name">
             <button type="submit" id='submit-name'>Submit</button>
@@ -20,7 +22,10 @@
         <div id="player-1">
             <div class="name" id='p1name'></div>
             <div class="choices" id="p1choices"></div>
-            <div class="win-loss" id="p1win-loss"></div>
+            <div class="win-loss" id="p1win-loss">
+                <h3 id='p1wins'></h3>
+                <h3 id='p1losses'></h3>
+            </div>
         </div>
         <div id="results">
 
@@ -28,7 +33,10 @@
         <div id="player-2">
             <div class="name" id='p2name'></div>
             <div class="choices" id="p2choices"></div>
-            <div class="win-loss" id="p2win-loss"></div>
+            <div class="win-loss" id="p2win-loss">
+                    <h3 id='p2wins'></h3>
+                    <h3 id='p2losses'></h3>
+            </div>
         </div>
     </div>
     <button id='test-delete'>Test Delete</button>

@@ -26,8 +26,6 @@ var playerOne = '',
     playerTwo = '',
     playerNum = null; //important for determining who exited game
 
-var testUnload = 0;    
-
 function addPlayer(event){
     var name = $('#name-input').val();
     event.preventDefault();
@@ -35,7 +33,7 @@ function addPlayer(event){
         //P1 and P2 exist
         if(playerTwo){
             var msg = "There's too many players!"
-            console.log(msg);
+            alert(msg);
         }
         //only P1 exists
         else{
@@ -67,17 +65,36 @@ function addPlayer(event){
         })
         playerNum = 1;
     }
+
+    //hide form
+    $('#enter-name').addClass('invisible')
 }
 
 database.ref().on('value', function(snapshot){
-
-    snapshot.val().players[1] ? 
-        playerOne = snapshot.val().players[1].name 
-        : null;
-    
-    snapshot.val().players[2] ? 
-        playerTwo = snapshot.val().players[2].name 
-        : null;
+    //if P1 exists
+    if (snapshot.val().players[1]){
+        var p1 = snapshot.val().players[1]
+        playerOne = p1.name;
+        $('#p1name').text(playerOne);
+        $('#p1wins').text(p1.wins);
+        $('#p1losses').text(p1.losses);
+    }else{
+        $('#p1name').text('Waiting for Player 1');
+        $('#p1wins').text('');
+        $('#p1losses').text('')
+    }
+    //if P2 exists
+    if(snapshot.val().players[2]){ 
+        var p2 = snapshot.val().players[2]
+        playerOne = p2.name;
+        $('#p2name').text(playerOne);
+        $('#p2wins').text(p2.wins);
+        $('#p2losses').text(p2.losses); 
+    }else{
+        $('#p2name').text('Waiting for Player 2');
+        $('#p2wins').text('');
+        $('#p2losses').text('');
+    }
 
 }, function(error){
 
@@ -97,5 +114,6 @@ $('#test-delete').click(function(event){
 //delete player if they close/refresh page
 window.onbeforeunload = function(){
     database.ref().child('players/' + playerNum).remove();
-
 }
+
+//problems with last player who exits
