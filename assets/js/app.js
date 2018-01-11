@@ -26,6 +26,8 @@ var playerOne = '',
     playerTwo = '',
     playerNum = null; //important for determining who exited game
 
+var testUnload = 0;    
+
 function addPlayer(event){
     var name = $('#name-input').val();
     event.preventDefault();
@@ -69,11 +71,11 @@ function addPlayer(event){
 
 database.ref().on('value', function(snapshot){
 
-    snapshot.val().players[1].name ? 
+    snapshot.val().players[1] ? 
         playerOne = snapshot.val().players[1].name 
         : null;
     
-    snapshot.val().players[2].name ? 
+    snapshot.val().players[2] ? 
         playerTwo = snapshot.val().players[2].name 
         : null;
 
@@ -83,9 +85,17 @@ database.ref().on('value', function(snapshot){
 });
 
 $('#submit-name').click(addPlayer);
+
+//delete this button later, just used to quickly delete firebase data
 $('#test-delete').click(function(event){
     event.preventDefault();
     database.ref().child('players').remove();
     playerOne = '';
     playerTwo = '';
 })
+
+//delete player if they close/refresh page
+window.onbeforeunload = function(){
+    database.ref().child('players/' + playerNum).remove();
+
+}
