@@ -70,30 +70,38 @@ function addPlayer(event){
     $('#enter-name').addClass('invisible')
 }
 
+function deletePlayerFromDOM(num){
+    $('#p' + num + 'name').text('Waiting for Player ' + num);
+    $('#p' + num + 'wins').text('');
+    $('#p' + num + 'losses').text('')
+}
+
 database.ref().on('value', function(snapshot){
-    //if P1 exists
-    if (snapshot.val().players[1]){
-        var p1 = snapshot.val().players[1]
-        playerOne = p1.name;
-        $('#p1name').text(playerOne);
-        $('#p1wins').text(p1.wins);
-        $('#p1losses').text(p1.losses);
+    //if data exists
+    if (snapshot.val()){
+        //if P1 exists
+        if(snapshot.val().players[1]){
+            var p1 = snapshot.val().players[1]
+            playerOne = p1.name;
+            $('#p1name').text(playerOne);
+            $('#p1wins').text(p1.wins);
+            $('#p1losses').text(p1.losses);
+        }else{
+            deletePlayerFromDOM(1);
+        }
+        //if P2 exists
+        if(snapshot.val().players[2]){ 
+            var p2 = snapshot.val().players[2]
+            playerTwo = p2.name;
+            $('#p2name').text(playerTwo);
+            $('#p2wins').text(p2.wins);
+            $('#p2losses').text(p2.losses); 
+        }else{
+            deletePlayerFromDOM(2);
+        }
     }else{
-        $('#p1name').text('Waiting for Player 1');
-        $('#p1wins').text('');
-        $('#p1losses').text('')
-    }
-    //if P2 exists
-    if(snapshot.val().players[2]){ 
-        var p2 = snapshot.val().players[2]
-        playerOne = p2.name;
-        $('#p2name').text(playerOne);
-        $('#p2wins').text(p2.wins);
-        $('#p2losses').text(p2.losses); 
-    }else{
-        $('#p2name').text('Waiting for Player 2');
-        $('#p2wins').text('');
-        $('#p2losses').text('');
+        deletePlayerFromDOM(1);
+        deletePlayerFromDOM(2);
     }
 
 }, function(error){
