@@ -84,14 +84,34 @@ function showButtons(){
     if(playerNum === 1){
         $('#p1choices').append('Player 1 choices')
         console.log('it worked');
+        makeButtons();
     }
 
     if(playerNum === 2){
         $('#p2choices').append('Player 2 choices')
+        makeButtons();
     }
 }
 
+function makeButtons(){
+    var rock = $('<div data-rps="rock" class="rps-button">');
+    rock.append('<img src="./assets/images/Rock-button.png">');
 
+    var paper = $('<div data-rps="paper" class="rps-button">');
+    paper.append('<img src="./assets/images/Paper-button.png">');
+
+    var scissors = $('<div data-rps="scissors" class="rps-button">');
+    scissors.append('<img src="./assets/images/Scissors-button.png">');
+
+    $('#p' + playerNum + 'choices').append(rock).append(paper).append(scissors);
+}
+
+function rpsButtonClick(){
+    var choice = $(this).attr('data-rps')
+    console.log('Player' + playerNum + ' selected ' + choice)
+}
+
+//DATABASE.ON EVENTS --------------------------------
 database.ref().on('value', function(snapshot){
     //if data exists
     if (snapshot.val()){
@@ -123,34 +143,15 @@ database.ref().on('value', function(snapshot){
     }
 
 }, function(error){
-
-
+    console.error(error)
 });
-// //show P1's info
-// function showPlayer1butt(){
-//     database.ref('/players/1').once('value', function(snapshot){
-//         console.log(snapshot.val());
-//         var p1 = snapshot.val()
-//         playerOne = p1.name;
-//         $('#p1name').text(playerOne);
-//         $('#p1wins').text(p1.wins);
-//         $('#p1losses').text(p1.losses);
-//     })
-// }
 
-// //show P2's info
-// function showPlayer2(){
-//     database.ref('/players/2').once('value', function(snapshot){ 
-//         console.log(snapshot.val());
-//         var p2 = snapshot.val();
-//         playerTwo = p2.name;
-//         $('#p2name').text(playerTwo);
-//         $('#p2wins').text(p2.wins);
-//         $('#p2losses').text(p2.losses); 
-//     })
-// }
+//CLICK EVENTS -------------------------
 
 $('#submit-name').click(addPlayer);
+
+$('#p1choices').on('click', '.rps-button', rpsButtonClick);
+$('#p2choices').on('click', '.rps-button', rpsButtonClick);
 
 //delete this button later, just used to quickly delete firebase data
 $('#test-delete').click(function(event){
