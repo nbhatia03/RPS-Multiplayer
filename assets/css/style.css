@@ -2,3 +2,13 @@
     visibility: hidden;
     background-color: blue;
 }
+
+.rps-button{
+    height: 100px;
+    width: 100px;
+    display: relative;
+}
+
+.rps-button > img {
+    width: 100%;
+}

@@ -24,7 +24,8 @@ var database = firebase.database();
 
 var playerOne = '',
     playerTwo = '',
-    playerNum = null; //important for determining who exited game
+    playerNum = null, //important for determining all kinds of shit
+    winner = null;
 
 function addPlayer(event){
     var name = $('#name-input').val();
@@ -82,13 +83,10 @@ function deletePlayerFromDOM(num){
 function showButtons(){
 
     if(playerNum === 1){
-        $('#p1choices').append('Player 1 choices')
-        console.log('it worked');
         makeButtons();
     }
 
     if(playerNum === 2){
-        $('#p2choices').append('Player 2 choices')
         makeButtons();
     }
 }
@@ -108,10 +106,21 @@ function makeButtons(){
 
 function rpsButtonClick(){
     var choice = $(this).attr('data-rps')
-    console.log('Player' + playerNum + ' selected ' + choice)
+    database.ref('players/' + playerNum).update({
+        choice: choice
+    })
+    
+}
+
+function determineWinner(info){
+    var p1choice = info[1].choice;
+    var p2choice = info[2].choice;
+    console.log(p1choice);
+    console.log(p2choice);
 }
 
 //DATABASE.ON EVENTS --------------------------------
+//fires too much for my liking, fix if I have time
 database.ref().on('value', function(snapshot){
     //if data exists
     if (snapshot.val()){
@@ -120,10 +129,12 @@ database.ref().on('value', function(snapshot){
             var p1 = snapshot.val().players[1]
             playerOne = p1.name;
             $('#p1name').text(playerOne);
-            $('#p1wins').text(p1.wins);
-            $('#p1losses').text(p1.losses);
+            $('#p1wins').text('Wins: ' + p1.wins);
+            $('#p1losses').text('Losses: ' + p1.losses);
+            console.log(playerOne);
            
         }else{
+            playerOne = '';
             deletePlayerFromDOM(1);
         }
         //if P2 exists
@@ -131,13 +142,17 @@ database.ref().on('value', function(snapshot){
             var p2 = snapshot.val().players[2]
             playerTwo = p2.name;
             $('#p2name').text(playerTwo);
-            $('#p2wins').text(p2.wins);
-            $('#p2losses').text(p2.losses); 
+            $('#p2wins').text('Wins: ' + p2.wins);
+            $('#p2losses').text('Losses: ' + p2.losses); 
+            console.log(playerTwo)
     
         }else{
+            playerTwo = '';
             deletePlayerFromDOM(2);
         }
     }else{
+        playerOne = '';
+        playerTwo = '';
         deletePlayerFromDOM(1);
         deletePlayerFromDOM(2);
     }
@@ -145,6 +160,15 @@ database.ref().on('value', function(snapshot){
 }, function(error){
     console.error(error)
 });
+
+//check to see when both players have selected
+database.ref('players').on('value', function(snapshot){
+    //if both players have selected
+    if(snapshot.child('1/choice').exists() && snapshot.child('2/choice').exists()){
+        console.log('Both players have chosen!')
+        determineWinner(snapshot.val())
+    }
+})
 
 //CLICK EVENTS -------------------------
 
@@ -163,8 +187,10 @@ $('#test-delete').click(function(event){
 
 //delete player if they close/refresh page
 window.onbeforeunload = function(){
-    database.ref().child('players/' + playerNum).remove();
+    database.ref().child('players/' + playerNum).remove(); 
 }
 
 //trying random shit here
 
+//PROBLEMS ------
+//playerOne or playerTwo still detected after page is closed/refreshed
