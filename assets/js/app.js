@@ -102,6 +102,10 @@ function makeButtons(){
     scissors.append('<img src="./assets/images/Scissors-button.png">');
 
     $('#p' + playerNum + 'choices').append(rock).append(paper).append(scissors);
+
+    if(playerNum === 2){
+        $('img').addClass('reverse-img')
+    }
 }
 
 function rpsButtonClick(){
@@ -112,11 +116,48 @@ function rpsButtonClick(){
     
 }
 
-function determineWinner(info){
-    var p1choice = info[1].choice;
-    var p2choice = info[2].choice;
-    console.log(p1choice);
-    console.log(p2choice);
+function determineWinner(p1choice, p2choice){
+    
+    if(p1choice === 'rock'){
+        switch(p2choice){
+            case 'scissors':
+                winner = 1
+                break;
+            case 'paper':
+                winner = 2
+                break;
+            default:
+                winner = null;
+        }
+    }
+
+    if(p1choice === 'paper'){
+        switch(p2choice){
+            case 'scissors':
+                winner = 2
+                break;
+            case 'rock':
+                winner = 1
+                break;
+            default:
+                winner = null;
+        }
+    }
+
+    if(p1choice === 'scissors'){
+        switch(p2choice){
+            case 'paper':
+                winner = 1
+                break;
+            case 'rock':
+                winner = 2
+                break;
+            default:
+                winner = null;
+        }
+    }
+
+    console.log(winner);
 }
 
 //DATABASE.ON EVENTS --------------------------------
@@ -131,7 +172,6 @@ database.ref().on('value', function(snapshot){
             $('#p1name').text(playerOne);
             $('#p1wins').text('Wins: ' + p1.wins);
             $('#p1losses').text('Losses: ' + p1.losses);
-            console.log(playerOne);
            
         }else{
             playerOne = '';
@@ -144,7 +184,6 @@ database.ref().on('value', function(snapshot){
             $('#p2name').text(playerTwo);
             $('#p2wins').text('Wins: ' + p2.wins);
             $('#p2losses').text('Losses: ' + p2.losses); 
-            console.log(playerTwo)
     
         }else{
             playerTwo = '';
@@ -166,7 +205,12 @@ database.ref('players').on('value', function(snapshot){
     //if both players have selected
     if(snapshot.child('1/choice').exists() && snapshot.child('2/choice').exists()){
         console.log('Both players have chosen!')
-        determineWinner(snapshot.val())
+        var p1choice = snapshot.val()[1].choice;
+        var p2choice = snapshot.val()[2].choice;
+
+        database.ref('players/1/choice').remove();
+        database.ref('players/2/choice').remove();
+        determineWinner(p1choice, p2choice)
     }
 })
 
