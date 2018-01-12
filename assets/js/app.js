@@ -37,33 +37,36 @@ function addPlayer(event){
         }
         //only P1 exists
         else{
+            playerNum = 2;
             database.ref('/players/2').set({
                 name: name,
                 wins: 0,
                 losses: 0
             })
-
-            playerNum = 2;
+            showButtons();
         }
     }
     //P2 but no P1
     else if(playerTwo){ //might be able to delete this since its the same as the else statement
+        
+        playerNum = 1;
         database.ref('/players/1').set({
             name: name,
             wins: 0,
             losses: 0
         })
-
-        playerNum = 1;
+        showButtons();
     }
     //currently no players
     else{
+
+        playerNum = 1;
         database.ref('/players/1').set({
             name: name,
             wins: 0,
             losses: 0
         })
-        playerNum = 1;
+        showButtons();
     }
 
     //hide form
@@ -77,7 +80,7 @@ function deletePlayerFromDOM(num){
 }
 
 function showButtons(){
-    console.log('PlayerNum: ' + playerNum)
+
     if(playerNum === 1){
         $('#p1choices').append('Player 1 choices')
         console.log('it worked');
@@ -87,6 +90,7 @@ function showButtons(){
         $('#p2choices').append('Player 2 choices')
     }
 }
+
 
 database.ref().on('value', function(snapshot){
     //if data exists
@@ -98,7 +102,7 @@ database.ref().on('value', function(snapshot){
             $('#p1name').text(playerOne);
             $('#p1wins').text(p1.wins);
             $('#p1losses').text(p1.losses);
-            setTimeout(showButtons, 1000); //this needs to be asynchronous, also fires too many times
+           
         }else{
             deletePlayerFromDOM(1);
         }
@@ -109,7 +113,7 @@ database.ref().on('value', function(snapshot){
             $('#p2name').text(playerTwo);
             $('#p2wins').text(p2.wins);
             $('#p2losses').text(p2.losses); 
-            setTimeout(showButtons, 1000); ////this needs to be asynchronous
+    
         }else{
             deletePlayerFromDOM(2);
         }
@@ -122,6 +126,29 @@ database.ref().on('value', function(snapshot){
 
 
 });
+// //show P1's info
+// function showPlayer1butt(){
+//     database.ref('/players/1').once('value', function(snapshot){
+//         console.log(snapshot.val());
+//         var p1 = snapshot.val()
+//         playerOne = p1.name;
+//         $('#p1name').text(playerOne);
+//         $('#p1wins').text(p1.wins);
+//         $('#p1losses').text(p1.losses);
+//     })
+// }
+
+// //show P2's info
+// function showPlayer2(){
+//     database.ref('/players/2').once('value', function(snapshot){ 
+//         console.log(snapshot.val());
+//         var p2 = snapshot.val();
+//         playerTwo = p2.name;
+//         $('#p2name').text(playerTwo);
+//         $('#p2wins').text(p2.wins);
+//         $('#p2losses').text(p2.losses); 
+//     })
+// }
 
 $('#submit-name').click(addPlayer);
 
@@ -138,4 +165,5 @@ window.onbeforeunload = function(){
     database.ref().child('players/' + playerNum).remove();
 }
 
-//problems with last player who exits
+//trying random shit here
+
