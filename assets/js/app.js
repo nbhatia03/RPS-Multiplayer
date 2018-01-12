@@ -81,28 +81,8 @@ function deletePlayerFromDOM(num){
 }
 
 function showButtons(){
-
-    if(playerNum === 1){
-        makeButtons();
-    }
-
-    if(playerNum === 2){
-        makeButtons();
-    }
-}
-
-function makeButtons(){
-    var rock = $('<div data-rps="rock" class="rps-button">');
-    rock.append('<img src="./assets/images/Rock-button.png">');
-
-    var paper = $('<div data-rps="paper" class="rps-button">');
-    paper.append('<img src="./assets/images/Paper-button.png">');
-
-    var scissors = $('<div data-rps="scissors" class="rps-button">');
-    scissors.append('<img src="./assets/images/Scissors-button.png">');
-
-    $('#p' + playerNum + 'choices').append(rock).append(paper).append(scissors);
-
+    console.log(playerNum);
+    $('#p' + playerNum + 'choices').children().removeClass('invisible');
     if(playerNum === 2){
         $('img').addClass('reverse-img')
     }
