@@ -25,7 +25,7 @@ var database = firebase.database();
 var playerOne = '',
     playerTwo = '',
     playerNum = null, //important for determining all kinds of shit
-    winner = null;
+    winner = '';
 
 function addPlayer(event){
     var name = $('#name-input').val();
@@ -91,6 +91,8 @@ function showButtons(){
 function rpsButtonClick(){
     $(this).addClass('clicked')
     var choice = $(this).attr('data-rps')
+    //deactivate other buttons
+    $('.rps-button').removeClass('button-active');
     database.ref('players/' + playerNum).update({
         choice: choice
     })
@@ -102,39 +104,39 @@ function determineWinner(p1choice, p2choice){
     if(p1choice === 'rock'){
         switch(p2choice){
             case 'scissors':
-                winner = 1
+                winner = playerOne
                 break;
             case 'paper':
-                winner = 2
+                winner = playerTwo
                 break;
             default:
-                winner = null;
+                winner = '';
         }
     }
 
     if(p1choice === 'paper'){
         switch(p2choice){
             case 'scissors':
-                winner = 2
+                winner = playerTwo
                 break;
             case 'rock':
-                winner = 1
+                winner = playerOne
                 break;
             default:
-                winner = null;
+                winner = '';
         }
     }
 
     if(p1choice === 'scissors'){
         switch(p2choice){
             case 'paper':
-                winner = 1
+                winner = playerOne
                 break;
             case 'rock':
-                winner = 2
+                winner = playerTwo
                 break;
             default:
-                winner = null;
+                winner = '';
         }
     }
 
@@ -144,39 +146,56 @@ function determineWinner(p1choice, p2choice){
 function animateResults(p1choice, p2choice){
     var interval = 500;
     //Rock
-    $('#banner').attr('src', './assets/images/Rock-banner.png');
+    setTimeout(function(){
+        $('#banner').attr('src', './assets/images/Rock-banner.png').removeClass('invisible');
+    }, interval)
+    
     //Paper
     setTimeout(function(){
         $('#banner').attr('src', './assets/images/Paper-banner.png')
-    }, interval);
+    }, interval*2);
     //Scissors
     setTimeout(function(){
         $('#banner').attr('src', './assets/images/Scissors-banner.png')
-    }, interval*2);
+    }, interval*3);
     //Shoot
     setTimeout(function(){
         $('#banner').attr('src', './assets/images/Shoot.png')
-    }, interval*3);
-
+    }, interval*4);
+    //show hands
     setTimeout(function(){
         $('#p1choice').attr('src', './assets/images/' + p1choice + '.png')
             .animate({left: '0px'}, 'fast')
         
         $('#p2choice').attr('src', './assets/images/' + p2choice + '.png')
             .animate({right: '0px'}, 'fast')
-    }, interval*3.5)
-    
+    }, interval*4.5);
+
+    //announce winner
+    setTimeout(function(){
+        $('#winner').removeClass('invisible');
+        if(winner){
+            $('#winner').text(winner + ' wins!')
+        }else{
+            $('#winner').text("It's a tie!")
+        }
+
+    }, interval*6)
+
+    //restart the game
+    setTimeout(restartGame, interval*10)
 }
 
 function updateDB(){
-    if (winner === 1){
+    
+    if (winner === playerOne){
         database.ref('players/1').update({
             wins: Number($('#p1wins').text()) + 1
         })
         database.ref('players/2').update({
             losses: Number($('#p2losses').text()) + 1
         })
-    }else if (winner === 2){
+    }else if (winner === playerTwo){
         database.ref('players/2').update({
             wins: Number($('#p2wins').text()) + 1
         })
@@ -186,6 +205,19 @@ function updateDB(){
     }
 
     $('.rps-button').removeClass('clicked');
+}
+
+function restartGame(){
+    $('.rps-button').addClass('button-active');
+
+    $('#p1choice').animate({left: '-500px'}, 'slow');
+        
+    $('#p2choice').animate({right: '-500px'}, 'slow');
+
+    $('#banner').addClass('invisible');
+
+    $('#winner').addClass('invisible');
+
 }
 
 //DATABASE.ON EVENTS --------------------------------
@@ -242,7 +274,9 @@ database.ref('players').on('value', function(snapshot){
 
         determineWinner(p1choice, p2choice);
         animateResults(p1choice, p2choice);
-        updateDB();
+
+        updateDB(); //using setTimeout here causes DB to double count
+
     }
 })
 
@@ -250,8 +284,8 @@ database.ref('players').on('value', function(snapshot){
 
 $('#submit-name').click(addPlayer);
 
-$('#p1choices').on('click', '.rps-button', rpsButtonClick);
-$('#p2choices').on('click', '.rps-button', rpsButtonClick);
+$('#p1choices').on('click', '.button-active', rpsButtonClick);
+$('#p2choices').on('click', '.button-active', rpsButtonClick);
 
 //delete this button later, just used to quickly delete firebase data
 $('#test-delete').click(function(event){

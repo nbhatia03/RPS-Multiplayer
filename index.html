@@ -19,16 +19,17 @@
         <button type="submit" id='submit-name'>Submit</button>
     </form>
     <div id="content">
+
         <div class='player' id="player-1">
             <div class="name" id='p1name'></div>
             <div class="choices" id="p1choices">
-                <div data-rps="rock" class="rps-button invisible">
+                <div data-rps="rock" class="button-active rps-button invisible">
                     <img src="./assets/images/Rock-button.png" alt='rock button'>
                 </div>
-                <div data-rps="paper" class="rps-button invisible">
+                <div data-rps="paper" class="button-active rps-button invisible">
                     <img src="./assets/images/Paper-button.png" alt='paper button'>
                 </div>
-                <div data-rps="scissors" class="rps-button invisible">
+                <div data-rps="scissors" class="button-active rps-button invisible">
                     <img src="./assets/images/Scissors-button.png"
                     alt='scissors button'>
                 </div>
@@ -38,21 +39,24 @@
                 <h3>Losses: <b id='p1losses'></b></h3>
             </div>
         </div>
+
         <div id="results">
             <img src="./assets/images/paper.png" id="p1choice" alt="" class='final-choice'>
-            <img src='' id='banner' alt='banner'>
             <img src="./assets/images/rock.png" id="p2choice" alt="" class='final-choice reverse-img'>
+            <img src='' id='banner' alt='banner' class="invisible">
+            <h2 id="winner" class='invisible'></h2>
         </div>
+
         <div class='player' id="player-2">
             <div class="name" id='p2name'></div>
             <div class="choices" id="p2choices">
-                <div data-rps="rock" class="rps-button invisible">
+                <div data-rps="rock" class="button-active rps-button invisible">
                     <img src="./assets/images/Rock-button.png" alt='rock button'>
                 </div>
-                <div data-rps="paper" class="rps-button invisible">
+                <div data-rps="paper" class="button-active rps-button invisible">
                     <img src="./assets/images/Paper-button.png" alt='paper button'>
                 </div>
-                <div data-rps="scissors" class="rps-button invisible">
+                <div data-rps="scissors" class="button-active rps-button invisible">
                     <img src="./assets/images/Scissors-button.png" alt='scissors button'>
                 </div>
             </div>

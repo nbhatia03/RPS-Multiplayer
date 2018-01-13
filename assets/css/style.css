@@ -32,7 +32,7 @@
     width: 100%;
 }
 
-.rps-button > img:hover{
+.button-active > img:hover{
     filter:
         contrast(1000%)
         /* black to white */
@@ -63,6 +63,8 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
+    border: 3px groove black;
+    display: grid;
 }
 
 .final-choice{
@@ -81,7 +83,12 @@
 }
 
 #banner{
-    height: 33%;
+    max-height: 33%;
+    max-width: 100%;
     margin: 0 auto;
     display: block;
+}
+
+#winner{
+    margin: auto;
 }
