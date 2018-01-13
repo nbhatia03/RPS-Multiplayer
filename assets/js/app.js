@@ -84,11 +84,12 @@ function showButtons(){
     console.log(playerNum);
     $('#p' + playerNum + 'choices').children().removeClass('invisible');
     if(playerNum === 2){
-        $('img').addClass('reverse-img')
+        $('.rps-button').addClass('reverse-img')
     }
 }
 
 function rpsButtonClick(){
+    $(this).addClass('clicked')
     var choice = $(this).attr('data-rps')
     database.ref('players/' + playerNum).update({
         choice: choice
@@ -140,6 +141,53 @@ function determineWinner(p1choice, p2choice){
     console.log(winner);
 }
 
+function animateResults(p1choice, p2choice){
+    var interval = 500;
+    //Rock
+    $('#banner').attr('src', './assets/images/Rock-banner.png');
+    //Paper
+    setTimeout(function(){
+        $('#banner').attr('src', './assets/images/Paper-banner.png')
+    }, interval);
+    //Scissors
+    setTimeout(function(){
+        $('#banner').attr('src', './assets/images/Scissors-banner.png')
+    }, interval*2);
+    //Shoot
+    setTimeout(function(){
+        $('#banner').attr('src', './assets/images/Shoot.png')
+    }, interval*3);
+
+    setTimeout(function(){
+        $('#p1choice').attr('src', './assets/images/' + p1choice + '.png')
+            .animate({left: '0px'}, 'fast')
+        
+        $('#p2choice').attr('src', './assets/images/' + p2choice + '.png')
+            .animate({right: '0px'}, 'fast')
+    }, interval*3.5)
+    
+}
+
+function updateDB(){
+    if (winner === 1){
+        database.ref('players/1').update({
+            wins: Number($('#p1wins').text()) + 1
+        })
+        database.ref('players/2').update({
+            losses: Number($('#p2losses').text()) + 1
+        })
+    }else if (winner === 2){
+        database.ref('players/2').update({
+            wins: Number($('#p2wins').text()) + 1
+        })
+        database.ref('players/1').update({
+            losses: Number($('#p1losses').text()) + 1
+        })
+    }
+
+    $('.rps-button').removeClass('clicked');
+}
+
 //DATABASE.ON EVENTS --------------------------------
 //fires too much for my liking, fix if I have time
 database.ref().on('value', function(snapshot){
@@ -150,8 +198,8 @@ database.ref().on('value', function(snapshot){
             var p1 = snapshot.val().players[1]
             playerOne = p1.name;
             $('#p1name').text(playerOne);
-            $('#p1wins').text('Wins: ' + p1.wins);
-            $('#p1losses').text('Losses: ' + p1.losses);
+            $('#p1wins').text(p1.wins);
+            $('#p1losses').text(p1.losses);
            
         }else{
             playerOne = '';
@@ -162,8 +210,8 @@ database.ref().on('value', function(snapshot){
             var p2 = snapshot.val().players[2]
             playerTwo = p2.name;
             $('#p2name').text(playerTwo);
-            $('#p2wins').text('Wins: ' + p2.wins);
-            $('#p2losses').text('Losses: ' + p2.losses); 
+            $('#p2wins').text(p2.wins);
+            $('#p2losses').text(p2.losses); 
     
         }else{
             playerTwo = '';
@@ -188,9 +236,13 @@ database.ref('players').on('value', function(snapshot){
         var p1choice = snapshot.val()[1].choice;
         var p2choice = snapshot.val()[2].choice;
 
+        //rmove choices from DB so this isn't fired again
         database.ref('players/1/choice').remove();
         database.ref('players/2/choice').remove();
-        determineWinner(p1choice, p2choice)
+
+        determineWinner(p1choice, p2choice);
+        animateResults(p1choice, p2choice);
+        updateDB();
     }
 })
 

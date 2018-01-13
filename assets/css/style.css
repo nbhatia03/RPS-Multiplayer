@@ -16,6 +16,12 @@
     justify-content: space-around;
 }
 
+.player{
+    border: 3px groove black;
+    box-sizing: border-box;
+    width: 25%;
+}
+
 .rps-button{
     height: 100px;
     width: 100px;
@@ -37,4 +43,45 @@
         saturate(10000%)
         /* do whatever you want with yellow */
         hue-rotate(-40deg); ;
+}
+
+.clicked{
+    filter:
+    contrast(1000%)
+    /* black to white */
+    invert(76%)
+    /* white to off-white */
+    sepia(100%)
+    /* off-white to yellow */
+    saturate(10000%)
+    /* do whatever you want with yellow */
+    hue-rotate(-40deg); ;
+}
+
+#results{
+    width: 40%;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.final-choice{
+    width: 50%;
+    height: auto;
+    position: absolute;
+
+}
+
+#p1choice{
+    left: -500px;
+}
+
+#p2choice{
+    right: -500px;
+}
+
+#banner{
+    height: 33%;
+    margin: 0 auto;
+    display: block;
 }
