@@ -28,50 +28,57 @@ var playerOne = '',
     winner = '';
 
 function addPlayer(event){
-    var name = $('#name-input').val();
+    var name = $('#name-input').val().trim();
     event.preventDefault();
-    if(playerOne){
-        //P1 and P2 exist
-        if(playerTwo){
-            var msg = "There's too many players!"
-            alert(msg);
+    //something was input
+    if(name){
+        if(playerOne){
+            //P1 and P2 exist
+            if(playerTwo){
+                var msg = "There's too many players!"
+                alert(msg);
+            }
+            //only P1 exists
+            else{
+                playerNum = 2;
+                database.ref('/players/2').set({
+                    name: name,
+                    wins: 0,
+                    losses: 0
+                })
+                showButtons();
+            }
         }
-        //only P1 exists
-        else{
-            playerNum = 2;
-            database.ref('/players/2').set({
+        //P2 but no P1
+        else if(playerTwo){ //might be able to delete this since its the same as the else statement
+            
+            playerNum = 1;
+            database.ref('/players/1').set({
                 name: name,
                 wins: 0,
                 losses: 0
             })
             showButtons();
         }
-    }
-    //P2 but no P1
-    else if(playerTwo){ //might be able to delete this since its the same as the else statement
-        
-        playerNum = 1;
-        database.ref('/players/1').set({
-            name: name,
-            wins: 0,
-            losses: 0
-        })
-        showButtons();
-    }
-    //currently no players
-    else{
+        //currently no players
+        else{
 
-        playerNum = 1;
-        database.ref('/players/1').set({
-            name: name,
-            wins: 0,
-            losses: 0
-        })
-        showButtons();
-    }
+            playerNum = 1;
+            database.ref('/players/1').set({
+                name: name,
+                wins: 0,
+                losses: 0
+            })
+            showButtons();
+        }
 
-    //hide form
-    $('#enter-name').addClass('invisible')
+        //hide form
+        setTimeout(function(){
+            $('#enter-name').slideUp()
+        }, 800)
+    }else{
+        alert('Enter your name!')
+    }
 }
 
 function deletePlayerFromDOM(num){
@@ -210,9 +217,9 @@ function updateDB(){
 function restartGame(){
     $('.rps-button').addClass('button-active');
 
-    $('#p1choice').animate({left: '-500px'}, 'slow');
+    $('#p1choice').animate({left: '-500px'}, 1500);
         
-    $('#p2choice').animate({right: '-500px'}, 'slow');
+    $('#p2choice').animate({right: '-500px'}, 1500);
 
     $('#banner').addClass('invisible');
 
