@@ -218,6 +218,8 @@ function restartGame(){
 
     $('#winner').addClass('invisible');
 
+    $('.player').css('border-color', 'black');
+
 }
 
 //DATABASE.ON EVENTS --------------------------------
@@ -262,6 +264,14 @@ database.ref().on('value', function(snapshot){
 
 //check to see when both players have selected
 database.ref('players').on('value', function(snapshot){
+    if(snapshot.child('1/choice').exists()){
+        $('#player-1').css('border', '3px solid #f84e3b')
+    }
+
+    if(snapshot.child('2/choice').exists()){
+        $('#player-2').css('border', '3px solid #f84e3b')
+    }
+    
     //if both players have selected
     if(snapshot.child('1/choice').exists() && snapshot.child('2/choice').exists()){
         console.log('Both players have chosen!')
