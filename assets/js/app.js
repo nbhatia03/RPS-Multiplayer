@@ -225,7 +225,7 @@ function restartGame(){
 
     $('#winner').addClass('invisible');
 
-    $('.player').css('border-color', 'black');
+    $('.player').css('border-color', '#008DBF');
 
 }
 
@@ -304,20 +304,9 @@ $('#submit-name').click(addPlayer);
 $('#p1choices').on('click', '.button-active', rpsButtonClick);
 $('#p2choices').on('click', '.button-active', rpsButtonClick);
 
-//delete this button later, just used to quickly delete firebase data
-$('#test-delete').click(function(event){
-    event.preventDefault();
-    database.ref().child('players').remove();
-    playerOne = '';
-    playerTwo = '';
-})
 
 //delete player if they close/refresh page
 window.onbeforeunload = function(){
     database.ref().child('players/' + playerNum).remove(); 
 }
 
-//trying random shit here
-
-//PROBLEMS ------
-//playerOne or playerTwo still detected after page is closed/refreshed

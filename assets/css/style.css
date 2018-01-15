@@ -3,6 +3,9 @@ body{
     display: flex;
     flex-direction: column;
     align-content: center;
+    min-height: 100vh;
+    background-color: #30BCED;
+    background-image: url("https://www.transparenttextures.com/patterns/diagmonds-light.png");
 
 }
 
@@ -50,16 +53,18 @@ form > button:hover{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    margin-top: 4em;
 }
 
 .player{
-    border: 3px groove black;
+    border: 3px groove #008DBF;
     box-sizing: border-box;
     width: 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background: ghostwhite;
 }
 
 .rps-button{
@@ -117,8 +122,9 @@ h3{
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    border: 3px groove black;
+    border: 3px groove #30BCED;
     display: grid;
+    background: ghostwhite;
 }
 
 .final-choice{
